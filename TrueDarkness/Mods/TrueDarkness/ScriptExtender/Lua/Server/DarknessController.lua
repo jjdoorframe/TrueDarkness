@@ -1,6 +1,6 @@
 function OnStatusApplied(objectGuid, status)
     if status == "DARKNESS_TECHNICAL" then
-        -- Store objects that have active Darkness statuses in a persistent ModVar
+        -- Store items that have active Darkness statuses in a persistent ModVar
         DarknessParents[objectGuid] = true
         Log("Darkness cast on item: %s", objectGuid)
         SavePersistence(DarknessParents)
@@ -16,12 +16,12 @@ function OnStatusApplied(objectGuid, status)
         else
             Log("Failed to get weapon wielder for: %s", objectGuid)
         end
-
     elseif status == "DARKNESS" then
         local entity = Ext.Entity.Get(objectGuid)
         if entity and entity.ServerItem and entity.ServerItem.Template and entity.ServerItem.Template.Id then
             local templateId = entity.ServerItem.Template.Id
             if templateId == DarknessHelperObject then
+                -- Store helper objects used for summoning Darkness sphere in persistence
                 DarknessParents[objectGuid] = true
                 Log("Darkness spawned into world: %s", objectGuid)
                 SavePersistence(DarknessParents)
@@ -32,7 +32,7 @@ function OnStatusApplied(objectGuid, status)
     end
 end
 
---- Kill object helper summoned by Darkness spell to clear concentration
+--- Kill helper object summoned by Darkness spell to clear concentration
 local function DestroyDarknessHelper(objectGUID)
     if objectGUID ~= nil then
         if Ext.Entity.Get(objectGUID) then

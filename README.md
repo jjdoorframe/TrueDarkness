@@ -84,7 +84,7 @@ Similarly, Sleet Storm now applies both Blinded and Heavily obscured conditions.
 * Mods that introduce Blind Fighting should all function correctly, regardless of the mod's implementation.
 
 ### COMPATIBILITY
-As the intention of ***True Darkness*** is to bring Baldur's Gate 3 closer to the 5e ruleset, it has been tested with other mods that share this goal and shouldn't conflict with any of them. There is a patch available for RAW if you're using its ***spells*** feature.
+As the intention of ***True Darkness*** is to bring Baldur's Gate 3 closer to the 5e ruleset, it has been tested with other mods that share this goal and shouldn't conflict with any of them.
 
 For any other mods, the most likely incompatibilities are cloud spells, since they change surfaces. If you'd like to make sure that the changes introduced by ***True Darkness*** are working as intended, place the mod close to the bottom of your load order. Whichever mod is lower determines which version is used.
 

@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<save>
+	<version major="4" minor="7" revision="1" build="3" lslib_meta="v1,bswap_guids,lsf_keys_adjacency" />
+	<region id="Templates">
+		<node id="Templates">
+			<children>
+				<node id="GameObjects">
+					<attribute id="MapKey" type="FixedString" value="bdddd432-a5fd-4110-bfc2-90d7792631a0" />
+					<attribute id="Name" type="LSString" value="TD_Helper_Spell_Darkness" />
+					<attribute id="LevelName" type="FixedString" value="" />
+					<attribute id="Type" type="FixedString" value="item" />
+					<attribute id="ParentTemplateId" type="FixedString" value="06f96d65-0ee5-4ed5-a30a-92a3bfe3f708" />
+					<attribute id="VisualTemplate" type="FixedString" value="fd5aa94f-66ec-14ec-fa97-b88fae69796b" />
+					<attribute id="PhysicsTemplate" type="FixedString" value="2d2f7dcc-5133-e875-9540-d981057106ea" />
+					<attribute id="SeeThrough" type="bool" value="False" />
+					<attribute id="DisplayName" type="TranslatedString" handle="h7a191deagde7ag4ae9g3a09gb781fcff8b65" version="19" />
+					<attribute id="CanClickThrough" type="bool" value="True" />
+					<attribute id="WalkThrough" type="bool" value="True" />
+					<attribute id="IsPointerBlocker" type="bool" value="True" />
+					<attribute id="Stats" type="FixedString" value="TD_DarknessObject" />
+					<attribute id="CanBePickpocketed" type="bool" value="False" />
+					<attribute id="IsTradable" type="uint8" value="2" />
+					<attribute id="IsInteractionDisabled" type="bool" value="False" />
+					<attribute id="Description" type="TranslatedString" handle="ha6fe1b72g85b1g1f0bgf3dega50a478893c9" version="19" />
+					<attribute id="IsInspector" type="bool" value="False" />
+					<children>
+						<node id="Scripts" />
+					</children>
+				</node>
+			</children>
+		</node>
+	</region>
+</save>

@@ -1,0 +1,87 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<save>
+	<version major="4" minor="7" revision="1" build="3" lslib_meta="v1,bswap_guids,lsf_keys_adjacency" />
+	<region id="Templates">
+		<node id="Templates">
+			<children>
+				<node id="GameObjects">
+					<attribute id="Description" type="TranslatedString" handle="h8cd139f2gb540g43a8g8cdcg2a8e0a6b7355" version="1" />
+					<attribute id="LevelName" type="FixedString" value="" />
+					<attribute id="MapKey" type="FixedString" value="83661f9a-0090-4a78-8766-ecd187b628cb" />
+					<attribute id="Name" type="LSString" value="SurfaceCloudkill6Cloud" />
+					<attribute id="ParentTemplateId" type="FixedString" value="adb16a84-5052-4e77-9ef8-4df2d2b7d212" />
+					<attribute id="Type" type="FixedString" value="surface" />
+					<attribute id="_OriginalFileVersion_" type="int64" value="144115207403209034" />
+					<children>
+						<node id="FX" />
+						<node id="InstanceVisual">
+							<children>
+								<node id="InstanceVisual">
+									<attribute id="GridSize" type="float" value="4" />
+									<attribute id="Height" type="fvec2" value="0 1" />
+									<attribute id="RandomPlacement" type="float" value="0.5" />
+									<attribute id="Rotation" type="ivec2" value="0 0" />
+									<attribute id="Scale" type="fvec2" value="1 1" />
+									<attribute id="SpawnCell" type="int32" value="87" />
+									<attribute id="SurfaceNeeded" type="float" value="0" />
+									<attribute id="SurfaceRadiusMax" type="float" value="0" />
+									<attribute id="Visual" type="FixedString" value="f9b1f8a5-8c10-6005-5d19-ed1b64c6ae68" />
+								</node>
+							</children>
+						</node>
+						<node id="IntroFX" />
+						<node id="StatusData">
+							<children>
+								<node id="StatusData">
+									<attribute id="AffectedByRoll" type="bool" value="False" />
+									<attribute id="ApplyToCharacters" type="bool" value="True" />
+									<attribute id="ApplyToItems" type="bool" value="False" />
+									<attribute id="ApplyTypes" type="uint8" value="11" />
+									<attribute id="Chance" type="float" value="1" />
+									<attribute id="DontTickWhileOnSurface" type="bool" value="False" />
+									<attribute id="Duration" type="float" value="1" />
+									<attribute id="Force" type="bool" value="False" />
+									<attribute id="KeepAlive" type="bool" value="False" />
+									<attribute id="OnlyOncePerTurn" type="bool" value="True" />
+									<attribute id="Remove" type="bool" value="False" />
+									<attribute id="StatusId" type="FixedString" value="CLOUDKILL_6" />
+									<attribute id="VanishOnApply" type="bool" value="False" />
+								</node>
+								<node id="StatusData">
+									<attribute id="StatusId" type="FixedString" value="BLINDED" />
+									<attribute id="Chance" type="float" value="1" />
+									<attribute id="Duration" type="float" value="-1" />
+									<attribute id="Remove" type="bool" value="False" />
+									<attribute id="KeepAlive" type="bool" value="True" />
+									<attribute id="DontTickWhileOnSurface" type="bool" value="False" />
+									<attribute id="ApplyToCharacters" type="bool" value="True" />
+									<attribute id="ApplyToItems" type="bool" value="False" />
+									<attribute id="VanishOnApply" type="bool" value="False" />
+									<attribute id="Force" type="bool" value="False" />
+									<attribute id="AffectedByRoll" type="bool" value="False" />
+									<attribute id="OnlyOncePerTurn" type="bool" value="False" />
+									<attribute id="ApplyTypes" type="uint8" value="7" />
+								</node>
+								<node id="StatusData">
+									<attribute id="StatusId" type="FixedString" value="HEAVILY_OBSCURED_STATUS" />
+									<attribute id="Chance" type="float" value="1" />
+									<attribute id="Duration" type="float" value="-1" />
+									<attribute id="Remove" type="bool" value="False" />
+									<attribute id="KeepAlive" type="bool" value="True" />
+									<attribute id="DontTickWhileOnSurface" type="bool" value="False" />
+									<attribute id="ApplyToCharacters" type="bool" value="True" />
+									<attribute id="ApplyToItems" type="bool" value="False" />
+									<attribute id="VanishOnApply" type="bool" value="False" />
+									<attribute id="Force" type="bool" value="False" />
+									<attribute id="AffectedByRoll" type="bool" value="False" />
+									<attribute id="OnlyOncePerTurn" type="bool" value="False" />
+									<attribute id="ApplyTypes" type="uint8" value="7" />
+								</node>
+							</children>
+						</node>
+					</children>
+				</node>
+			</children>
+		</node>
+	</region>
+</save>
