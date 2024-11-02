@@ -64,7 +64,7 @@ While heavily obscured, you have advantage on your attacks due to being unseen, 
 Devil's Sight does not grant an ability to see inside HoH, as it creates a sphere of ***blackness***, and not magical darkness.
 
 ### Clouds
-Fog Cloud, Stinking Cloud, and Cloudkill now apply both Blinded and Heavily Obscured conditions.
+Fog Cloud, Stinking Cloud, and Cloudkill now apply both Blinded and Heavily Obscured conditions. Also fixed Cloudkill dealing damage multiple times per turn while I was at it.
 
 ### Sleet Storm
 Similarly, Sleet Storm now applies both Blinded and Heavily obscured conditions. To simulate it better, a fog cloud also appears inside of it.
