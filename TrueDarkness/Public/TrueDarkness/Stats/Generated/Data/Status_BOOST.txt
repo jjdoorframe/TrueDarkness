@@ -1,0 +1,157 @@
+// Removed SightRangeMaximum(3)
+// Most spells in 5e that require attack roll don't require sight, but are done at disadvantage
+// Spells that require sight are handled with new target conditions applied in DarknessSpellConditions.lua
+new entry "BLINDED"
+type "StatusData"
+data "StatusType" "BOOST"
+using "BLINDED"
+// A blinded creature can't see and automatically fails any &lt;LSTag Tooltip="AbilityCheck"&gt;ability check&lt;/LSTag&gt; that requires sight.&lt;br&gt;&lt;Br&gt;&lt;LSTag Tooltip="AttackRoll"&gt;Attack rolls&lt;/LSTag&gt; against the creature have ad&lt;LSTag Tooltip="Advantage"&gt;Advantage&lt;/LSTag&gt;vantage, and the creature's attack rolls have &lt;LSTag Tooltip="Disadvantage"&gt;disadvantage&lt;/LSTag&gt;.
+data "Description" "h5c55526f9fa245028ae5fd714d69378d1aca;1"
+// Support for mods that introduce FightingStyle_BlindFighting to work correctly at 10ft distance
+data "Boosts" "IF(not TD_BlindFighting()):Disadvantage(AttackRoll); IF(not TD_BlindFighting(context.Target)):Advantage(AttackTarget)"
+
+// Blinded by Hunger of Hadar
+// BG3 used BLINDED_DARKNESS here, making Devil's Sight work inside HoH
+new entry "VOID_BLINDED"
+type "StatusData"
+data "StatusType" "BOOST"
+using "BLINDED"
+
+// Hunger of Hadar
+// Forced diadvantage on attack rolls agains the targets that are inside HoH
+// BG3 has faulty vision calculation that results in being able to see targets when close to obstruction
+new entry "VOID_START"
+type "StatusData"
+data "StatusType" "BOOST"
+using "VOID_START"
+data "Boosts" "IF(not TD_BlindFighting()):Disadvantage(AttackTarget)"
+
+// Status indicating that a character is heavily obscured
+new entry "HEAVILY_OBSCURED_STATUS"
+type "StatusData"
+data "StatusType" "BOOST"
+data "StackId" "HEAVILY_OBSCURED_STATUS"
+// Heavily Obscured
+data "DisplayName" "hb520ddae838b4ef985c3b8da4274c6e95g73;1"
+// A heavily obscured creature is hidden from sight within a thick cloud or opaque fog. &lt;LSTag Tooltip="AttackRoll"&gt;Attack rolls&lt;/LSTag&gt; against the creature have &lt;LSTag Tooltip="Disadvantage"&gt;Disadvantage&lt;/LSTag&gt;.&lt;br&gt;&lt;Br&gt;The creature is effectively &lt;LSTag Type="Status" Tooltip="BLINDED"&gt;Blinded&lt;/LSTag&gt; while heavily obscured.
+data "Description" "h2643f9dbb1664974ac555c5f0fedf0ee091b;1"
+data "Icon" "Action_WildMagic_GasCloud"
+// Forcing disadvantage because the target is unseen
+data "Boosts" "IF(not TD_BlindFighting()):Disadvantage(AttackTarget)"
+data "StatusPropertyFlags" "DisableOverhead;DisableCombatlog"
+
+// Darkness status that defines the gameplay within Darkness aura
+new entry "DARKNESS"
+type "StatusData"
+data "StatusType" "BOOST"
+data "StackId" "DARKNESS"
+data "AuraRadius" "5"
+data "AuraStatuses" "TARGET:IF(Character()):ApplyStatus(BLINDED_DARKNESS,100,-1);TARGET:IF(Character()):ApplyStatus(DARKNESS_STATUS,100,-1);TARGET:IF(Character() or Item()):ApplyStatus(LIGHT_REMOVE,100,-1)"
+data "Boosts" "GameplayObscurity(5)"
+data "StatusPropertyFlags" "IndicateDarkness;BringIntoCombat;InitiateCombat;DisableOverhead;DisableCombatlog;DisablePortraitIndicator"
+data "StatusEffect" "7209c298-1c34-407d-882f-dd0cd7d57adb"
+
+// Status applied to objects when Darkness is cast as enchantment
+new entry "DARKNESS_TECHNICAL"
+type "StatusData"
+data "StatusType" "BOOST"
+// Darkness
+data "DisplayName" "h7a191deagde7ag4ae9g3a09gb781fcff8b65;1"
+data "Icon" "Spell_Evocation_Darkness"
+data "OnApplyFunctors" "ApplyStatus(DARKNESS,100,-1)"
+data "OnRemoveFunctors" "RemoveStatus(DARKNESS)"
+data "StatusPropertyFlags" "DisableCombatlog"
+
+// Status indicating that a character is inside Darkness cloud
+new entry "DARKNESS_STATUS"
+type "StatusData"
+data "StatusType" "BOOST"
+data "StackId" "DARKNESS_STATUS"
+// Enveloped in Darkness
+data "DisplayName" "h17293b9bgd533g66d2g97f0gd94ccf2d66fa;1"
+// A creature inside magical darkness is heavily obscured, and &lt;LSTag Tooltip="AttackRoll"&gt;attack rolls&lt;/LSTag&gt; against the the creature have &lt;LSTag Tooltip="Disadvantage"&gt;disadvantage&lt;/LSTag&gt;.&lt;br&gt;&lt;Br&gt;The creature is &lt;LSTag Type="Status" Tooltip="BLINDED"&gt;Blinded&lt;/LSTag&gt; and cannot perceive anything that relies on sight, unless it possesses an ability to see through magical darkness.
+data "Description" "hbc2ecd5egd9a9g4fa8g8486g91bd783691c6;1"
+data "Icon" "Spell_Evocation_Darkness"
+data "Boosts" "IF(not TD_SeeDarkness()):Disadvantage(AttackTarget); IF(not TD_SeeDarkness(context.Target)):Advantage(AttackRoll)"
+data "StatusPropertyFlags" "DisableOverhead;DisableCombatlog"
+
+// Helper status applied to Arrow of Darkness on hit that applies Darkness technical status
+// Can't apply statuses to spawned objects for duration
+new entry "DARKNESS_ARROW"
+type "StatusData"
+data "StatusType" "BOOST"
+data "OnApplyFunctors" "ApplyStatus(DARKNESS_TECHNICAL,100,100);RemoveStatus(DARKNESS_ARROW)"
+data "StatusPropertyFlags" "DisableOverhead;DisableCombatlog;DisablePortraitIndicator"
+
+// Helper status for dispeling Darknes applied to objects
+new entry "DARKNESS_OBJECT_REMOVE"
+type "StatusData"
+data "StatusType" "BOOST"
+data "StackId" "DARKNESS_OBJECT_REMOVE"
+data "OnApplyFunctors" "RemoveStatus(DARKNESS_TECHNICAL)"
+data "StatusPropertyFlags" "DisableOverhead;DisableCombatlog;DisablePortraitIndicator"
+
+// Helper status for dispeling Darkness with Daylight
+new entry "DARKNESS_REMOVE"
+type "StatusData"
+data "StatusType" "BOOST"
+data "StackId" "DARKNESS_REMOVE"
+data "OnApplyFunctors" "IF(Character()):ApplyEquipmentStatus(MainHand,DARKNESS_OBJECT_REMOVE,100,0);RemoveStatus(DARKNESS);RemoveStatus(DARKNESS_TECHNICAL)"
+data "StatusPropertyFlags" "DisableOverhead;DisableCombatlog;DisablePortraitIndicator"
+
+// Added aura to Daylight that removes Darkness
+new entry "DAYLIGHT"
+type "StatusData"
+data "StatusType" "BOOST"
+using "DAYLIGHT"
+data "AuraRadius" "15"
+data "AuraStatuses" "ApplyStatus(DARKNESS_REMOVE)"
+
+// Technical status for removing light from objects
+new entry "LIGHT_OBJECT_REMOVE"
+type "StatusData"
+data "StatusType" "BOOST"
+data "StackId" "LIGHT_REMOVE"
+data "OnApplyFunctors" "RemoveStatus(LIGHT);RemoveStatus(CONTINUAL_FLAME);RemoveStatus(CONTINUAL_FLAME_RED);RemoveStatus(FLAME_BLADE)"
+data "StatusPropertyFlags" "DisableOverhead;DisableCombatlog;DisablePortraitIndicator"
+
+// Status for dispeling magical light <= spell lvl 2
+// Cleaning spells that require concentration and summon helper objects is handled in DarknessController.json
+new entry "LIGHT_REMOVE"
+type "StatusData"
+data "StatusType" "BOOST"
+data "StackId" "LIGHT_REMOVE"
+data "OnApplyFunctors" "IF(Character()):ApplyEquipmentStatus(MainHand,LIGHT_OBJECT_REMOVE,100,0);IF(Item()):RemoveStatus(LIGHT);IF(Item()):RemoveStatus(DANCING_LIGHTS);IF(Character() or Item()):RemoveStatus(FAERIE_FIRE);IF(Item()):RemoveStatus(MOONBEAM_AURA);IF(Item()):RemoveStatus(CONTINUAL_FLAME);IF(Item()):RemoveStatus(CONTINUAL_FLAME_RED)"
+data "TickType" "StartTurn"
+data "TickFunctors" "IF(Character()):ApplyEquipmentStatus(MainHand,LIGHT_OBJECT_REMOVE,100,0);IF(Item()):RemoveStatus(LIGHT);IF(Item()):RemoveStatus(DANCING_LIGHTS);IF(Character() or Item()):RemoveStatus(FAERIE_FIRE);IF(Item()):RemoveStatus(MOONBEAM_AURA);IF(Character() or Item()):RemoveStatus(CONTINUAL_FLAME);IF(Character() or Item()):RemoveStatus(CONTINUAL_FLAME_RED)"
+data "StatusPropertyFlags" "DisableOverhead;DisableCombatlog;DisablePortraitIndicator"
+
+// Helper status applied on failed cast when target is in darkness
+new entry "CAST_INDARKNESS_FAILED"
+type "StatusData"
+data "StatusType" "BOOST"
+// Can't see the target!
+data "DisplayName" "hbf932bdb03cd4ccca8aa0c66f7ce8dc72cf2;1"
+data "Description" ""
+data "Icon" "Spell_Evocation_Darkness"
+data "StatusPropertyFlags" "DisableCombatlog;DisablePortraitIndicator"
+
+// Removed on tick
+// Now the cloud applies status for 1 turn to prevent damage more than once per turn
+new entry "CLOUDKILL"
+type "StatusData"
+data "StatusType" "BOOST"
+using "CLOUDKILL"
+data "OnTickRoll" ""
+data "OnTickSuccess" ""
+data "OnTickFail" ""
+
+// Added heavily obscured and blinded statuses while inside
+// Added projectile that creates fog cloud until I make new VFX
+new entry "SLEET_STORM"
+type "StatusData"
+data "StatusType" "BOOST"
+using "SLEET_STORM"
+data "AuraStatuses" "TARGET:IF(Character()):ApplyStatus(HEAVILY_OBSCURED_STATUS,100,-1);TARGET:IF(Character()):ApplyStatus(BLINDED,100,-1)"
+data "TickFunctors" "CreateExplosion(Projectile_SleetStorm_WaterFrozen); CreateExplosion(Projectile_SleetStorm_FogCloud)"
+data "OnApplyFunctors" "CreateExplosion(Projectile_SleetStorm_WaterFrozen); CreateExplosion(Projectile_SleetStorm_FogCloud)"

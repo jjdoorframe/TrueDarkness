@@ -1,0 +1,27 @@
+function TD_SeeDarkness(entity)
+    entity = entity or context.Source
+    return Tagged('BLINDSIGHT', entity)
+        | (HasStatus('TRUESIGHT', entity) & ~DistanceToGreaterThan(context.SourcePosition, context.TargetPosition, 36.5))
+        | (HasPassive('DevilsSight', entity) & ~DistanceToGreaterThan(context.SourcePosition, context.TargetPosition, 24))
+        | (HasPassive('FightingStyle_BlindFighting', entity) & ~DistanceToGreaterThan(context.SourcePosition, context.TargetPosition, 3))
+end
+
+function TD_BlindFighting(entity)
+    entity = entity or context.Source
+    return HasPassive('FightingStyle_BlindFighting', entity) & ~DistanceToGreaterThan(context.SourcePosition, context.TargetPosition, 3)
+end
+
+function TD_SpellCastingInDarkness(target, observer)
+    local result = ~HasStatus('SG_Blinded', observer) & (TD_SeeDarkness(observer) | (~HasStatus('DARKNESS_STATUS', target) & ~HasStatus('DARKNESS_STATUS', observer)))
+    return ConditionResult(result.Result, {ConditionError("TD_SpellCastingInDarkness_False")})
+end
+
+function TD_CasterNotBlinded(caster)
+    local result = ~HasStatus('SG_Blinded', caster)
+    return ConditionResult(result.Result, {ConditionError("TD_CasterNotBlinded_False")})
+end
+
+function TD_NotInDaylight(target)
+    local result = ~HasStatus('DARKNESS_REMOVE', target)
+    return ConditionResult(result.Result, {ConditionError("TD_NotInDaylight_False")})
+end

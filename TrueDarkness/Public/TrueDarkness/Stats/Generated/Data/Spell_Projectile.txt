@@ -1,0 +1,32 @@
+// Arrow of Darkness spawns an item Broken Arrow of Darkness instead of creating DarknessCloud surface
+// Item has a helper status DARKNESS_ARROW applied on spawn
+// DARKNESS_ARROW applies DARKNESS_TECHNICAL that's used by all items that have Darkness applied
+new entry "Projectile_ArrowOfDarkness"
+type "SpellData"
+data "SpellType" "Projectile"
+using "Projectile_ArrowOfDarkness"
+data "SpellProperties" "GROUND:Spawn(e01e030a-b0fe-4515-b5d1-b2365029c715,,DARKNESS_ARROW)"
+
+// Temp solution until I make new VFX
+new entry "Projectile_SleetStorm_FogCloud"
+type "SpellData"
+data "SpellType" "Projectile"
+data "SpellProperties" "GROUND:CreateSurface(9,1,FogCloud)"
+data "ExplodeRadius" "9"
+data "SpellRoll" ""
+data "SpellSuccess" ""
+data "SpellFail" ""
+data "TargetConditions" ""
+data "Trajectories" "f5d9ebda-56f7-4158-81ce-cd78dc18bf79"
+data "DisplayName" "he53d47eege942g4233g839cge18e5dcff41c;2"
+data "SpellAnimation" ""
+
+// Helping AI to do something useful with the spell, as it sucks at choosing a point in space
+new entry "Projectile_AiHelper_Darkness"
+type "SpellData"
+data "SpellType" "Projectile"
+using "Projectile_AiHelper_Summon_Strong"
+data "SpellProperties" "ApplyStatus(DARKNESS_STATUS,100,0);"
+data "AreaRadius" "5"
+data "ExplodeRadius" "5"
+data "TargetConditions" "Character()"

@@ -1,0 +1,7 @@
+{
+    "RequiredVersion": 20,
+    "ModTable": "TrueDarkness-6ec29fcc-f477-972f-7fcd-da7127884ade",
+    "FeatureFlags": [
+        "Lua"
+    ]
+}

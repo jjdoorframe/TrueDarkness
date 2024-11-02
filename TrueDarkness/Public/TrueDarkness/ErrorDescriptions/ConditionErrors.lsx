@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<save>
+	<version major="4" minor="0" revision="10" build="362"/>
+	<region id="ConditionErrors">
+		<node id="root">
+			<children>
+				<node id="ConditionErrors">
+					<attribute id="DisplayName" type="TranslatedString" handle="hbf932bdb03cd4ccca8aa0c66f7ce8dc72cf2" version="1" />
+					<attribute id="ErrorDescriptionType" type="uint8" value="0" />
+					<attribute id="Identifier" type="FixedString" value="TD_SpellCastingInDarkness_False" />
+					<attribute id="UUID" type="guid" value="4118789c-c019-4294-9ce2-0a891e748700" />
+				</node>
+				<node id="ConditionErrors">
+					<attribute id="DisplayName" type="TranslatedString" handle="hf3c01bbb2ae74485a4c17bae0e4609d17864" version="1" />
+					<attribute id="ErrorDescriptionType" type="uint8" value="0" />
+					<attribute id="Identifier" type="FixedString" value="TD_CasterNotBlinded_False" />
+					<attribute id="UUID" type="guid" value="e2ceedeb-8168-43f6-a159-b6c5c9786496" />
+				</node>
+				<node id="ConditionErrors">
+					<attribute id="DisplayName" type="TranslatedString" handle="h0047dc0243f243419fb2ff78202b02b29cdf" version="1" />
+					<attribute id="ErrorDescriptionType" type="uint8" value="0" />
+					<attribute id="Identifier" type="FixedString" value="TD_NotInDaylight_False" />
+					<attribute id="UUID" type="guid" value="7fb8db6f-74ab-473b-bc9d-de11e22009f7" />
+				</node>
+			</children>
+		</node>
+	</region>
+</save>
