@@ -3,7 +3,9 @@
 
 #### ***True Darkness*** attempts to bring Baldur’s Gate 3 one step closer to an authentic D&D experience by implementing the spell as close to 5e "Rules As Written" as technically possible and introducing a comprehensive rework of sight.
 
-# Requires [Norbyte's Script Extender](https://github.com/Norbyte/bg3se/releases)
+### Requires [Norbyte's Script Extender](https://github.com/Norbyte/bg3se/releases)
+
+### Nexus: https://www.nexusmods.com/baldursgate3/mods/13542
 
 ![https://i.imgur.com/69Lh9Dc.png](https://i.imgur.com/69Lh9Dc.png)
 > *Magical darkness spreads from a point you choose within range to fill a 15-foot radius sphere for the duration. The darkness spreads around corners. A creature with darkvision can’t see through this darkness, and nonmagical light can’t illuminate it.*
