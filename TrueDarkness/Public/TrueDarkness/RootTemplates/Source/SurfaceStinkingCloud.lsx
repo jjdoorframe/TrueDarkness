@@ -27,6 +27,7 @@
 					<attribute id="Summon" type="FixedString" value="bd8d5043-5cf7-427c-8dfc-829b7c6065d2" />
 					<attribute id="RollConditions" type="LSString" value="" />
 					<attribute id="ObscuredStateOverride" type="uint8" value="3" />
+					<attribute id="CanSeeThrough" type="bool" value="False" />
 					<attribute id="OnEnterDistanceOverride" type="float" value="0" />
 					<children>
 						<node id="InstanceVisual">

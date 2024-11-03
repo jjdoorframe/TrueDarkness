@@ -3,7 +3,7 @@ function OnStatusApplied(objectGuid, status)
         -- Store items that have active Darkness statuses in a persistent ModVar
         DarknessParents[objectGuid] = true
         Log("Darkness cast on item: %s", objectGuid)
-        SavePersistence(DarknessParents)
+        SavePersistence()
 
         -- Apply Darkness to all equipped weapons when it's cast on self to support changing weapon sets
         local characterGuid = GetWeaponWielderGuid(objectGuid)
@@ -24,11 +24,16 @@ function OnStatusApplied(objectGuid, status)
                 -- Store helper objects used for summoning Darkness sphere in persistence
                 DarknessParents[objectGuid] = true
                 Log("Darkness spawned into world: %s", objectGuid)
-                SavePersistence(DarknessParents)
+                SavePersistence()
             end
         else
             Log("Failed to get template id of: %s", objectGuid)
         end
+    elseif status == "VOID_AURA" then
+        -- Store Hunger of Harad in persistence
+        -- Doesn't need any checks because status is only ever applied to helper object
+        HadarParents[objectGuid] = true
+        Log("Hunger of Hadar spawned into world: %s", objectGuid)
     end
 end
 
@@ -39,7 +44,7 @@ local function DestroyDarknessHelper(objectGUID)
             Osi.Die(objectGUID)
             DarknessParents[objectGUID] = nil
             Log("Destroyed Darkness helper")
-            SavePersistence(DarknessParents)
+            SavePersistence()
         else
             Log("Failed to destroy Darkness helper: Already destroyed")
         end
@@ -53,7 +58,7 @@ function OnStatusRemoved(objectGuid, status)
         -- Remove Darkness items from persistence on status removed
         DarknessParents[objectGuid] = nil
         Log("Object lost Darkness status: %s", objectGuid)
-        SavePersistence(DarknessParents)
+        SavePersistence()
 
         -- Remove Darkness from all equipped weapons
         local characterGuid = GetWeaponWielderGuid(objectGuid)
@@ -76,6 +81,10 @@ function OnStatusRemoved(objectGuid, status)
                 Log("Darkness helper started destroy: %s", objectGuid)
             end
         end
+    elseif status == "VOID_AURA" then
+        HadarParents[objectGuid] = nil
+        Log("Hunger of Hadar was destroyed: %s", objectGuid)
+        SavePersistence()
     elseif status == "DANCING_LIGHTS" then
         -- Darknss removes statuses from light spells <= lvl 2 using aura
         if Ext.Entity.Get(objectGuid) then
@@ -240,10 +249,11 @@ end
 
 -- Check if a spell that targets a place is being cast inside Darkness
 function OnUsingSpellAtPosition(casterGuid, x, y, z, spell)
-    if casterGuid ~= nil and next(DarknessParents) and DarknessPlaceSpells[spell] then
-        local parents = DarknessParents
+    if casterGuid ~= nil and DarknessPlaceSpells[spell] then
+        local darknessRefs = DarknessParents
+        local hadarRefs = HadarParents
         -- Iterate over all active Darkness parent objects stored in persistence
-        for objectGuid, _ in pairs(parents) do
+        for objectGuid, _ in pairs(darknessRefs) do
             -- Check if spell target is inside Darkness aura of 5m
             if IsInDarknessAura(objectGuid, x, y, z, 5) then
                 if not CasterCanSee(casterGuid, x, y, z) then
@@ -254,6 +264,17 @@ function OnUsingSpellAtPosition(casterGuid, x, y, z, spell)
                     SetTimer(100, UnfreezeCaster, casterGuid)
                     return
                 end
+            end
+        end
+
+        -- Cancel cast if target is inside HoH
+        for objectGuid, _ in pairs(hadarRefs) do
+            _D(objectGuid)
+            if IsInDarknessAura(objectGuid, x, y, z, 6) then
+                Osi.ApplyStatus(casterGuid, "CAST_INDARKNESS_FAILED", 0, 1)
+                Osi.Freeze(casterGuid)
+                SetTimer(100, UnfreezeCaster, casterGuid)
+                return
             end
         end
     end

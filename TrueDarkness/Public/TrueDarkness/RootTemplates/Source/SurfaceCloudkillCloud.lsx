@@ -16,6 +16,7 @@
 					<attribute id="ParentTemplateId" type="FixedString" value="1cdb25bc-8026-4ea4-adcf-04476755eee4" />
 					<attribute id="RollConditions" type="LSString" value="" />
 					<attribute id="Type" type="FixedString" value="surface" />
+					<attribute id="CanSeeThrough" type="bool" value="False" />
 					<attribute id="_OriginalFileVersion_" type="int64" value="144115207403209029" />
 					<children>
 						<node id="FX" />

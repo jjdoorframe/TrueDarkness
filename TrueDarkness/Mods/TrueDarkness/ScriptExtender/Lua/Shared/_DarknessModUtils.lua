@@ -44,23 +44,42 @@ end
 -- Loads persisted ModVar table of items with active Darkness applied
 function LoadPersistence()
     local modVars = Ext.Vars.GetModVariables(ModuleUUID)
-    if modVars and modVars.DarknessParents then
-        DarknessParents = modVars.DarknessParents
-        Log("PERSISTENCE: LOADED")
+    if modVars then
+        if modVars.DarknessParents then
+            DarknessParents = modVars.DarknessParents
+            Log("PERSISTENCE: DARKNESS PARENTS LOADED")
+        else
+            DarknessParents = {}
+            Log("PERSISTENCE: DARKNESS PARENTS EMPTY - INITIALIZING")
+        end 
+
+        if modVars.HadarParents then
+            HadarParents = modVars.HadarParents
+            Log("PERSISTENCE: HADAR PARENTS LOADED")
+        else
+            HadarParents = {}
+            Log("PERSISTENCE: HADAR PARENTS EMPTY - INITIALIZING")
+        end 
     else
         DarknessParents = {}
-        Log("PERSISTENCE: EMPTY - INITIALIZING")
+        HadarParents = {}
+        Log("PERSISTENCE: FAILED MODVAR LOAD - INITIALIZING")
     end
 end
 
----@param data table
-function SavePersistence(data)
-    if data then
-        Ext.Vars.GetModVariables(ModuleUUID).DarknessParents = data
-        Log("PERSISTENCE: SAVED")
-        
+function SavePersistence()
+    if DarknessParents then
+        Ext.Vars.GetModVariables(ModuleUUID).DarknessParents = DarknessParents
+        Log("PERSISTENCE: DARKNESS PARENTS SAVED")
     else
-        Log("PERSISTENCE: DATA INVALID - ABORTING SAVE")
+        Log("PERSISTENCE: NO DARKNESS PARENTS TO SAVE")
+    end
+
+    if HadarParents then
+        Ext.Vars.GetModVariables(ModuleUUID).HadarParents = HadarParents
+        Log("PERSISTENCE: HADAR PARENTS SAVED")
+    else
+        Log("PERSISTENCE: NO HADAR PARENTS TO SAVE")
     end
 end
 

@@ -11,6 +11,7 @@
 					<attribute id="Name" type="LSString" value="SurfaceCloudkill6Cloud" />
 					<attribute id="ParentTemplateId" type="FixedString" value="adb16a84-5052-4e77-9ef8-4df2d2b7d212" />
 					<attribute id="Type" type="FixedString" value="surface" />
+					<attribute id="CanSeeThrough" type="bool" value="False" />
 					<attribute id="_OriginalFileVersion_" type="int64" value="144115207403209034" />
 					<children>
 						<node id="FX" />

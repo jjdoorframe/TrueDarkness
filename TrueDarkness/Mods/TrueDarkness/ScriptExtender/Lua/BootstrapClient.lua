@@ -6,3 +6,7 @@ Ext.Require("Client/DarknessSpellConditions.lua")
 Ext.Vars.RegisterModVariable(ModuleUUID, "DarknessParents", {
     Server = true
 })
+
+Ext.Vars.RegisterModVariable(ModuleUUID, "HadarParents", {
+    Server = true
+})

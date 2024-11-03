@@ -12,7 +12,7 @@ function TD_BlindFighting(entity)
 end
 
 function TD_SpellCastingInDarkness(target, observer)
-    local result = ~HasStatus('SG_Blinded', observer) & (TD_SeeDarkness(observer) | (~HasStatus('DARKNESS_STATUS', target) & ~HasStatus('DARKNESS_STATUS', observer)))
+    local result = (TD_BlindFighting(observer) | (~HasStatus('SG_Blinded', observer) & ~HasStatus('HEAVILY_OBSCURED_STATUS', target) & ~HasStatus('VOID_START', target))) & (TD_SeeDarkness(observer) | (~HasStatus('DARKNESS_STATUS', target) & ~HasStatus('DARKNESS_STATUS', observer)))
     return ConditionResult(result.Result, {ConditionError("TD_SpellCastingInDarkness_False")})
 end
 
