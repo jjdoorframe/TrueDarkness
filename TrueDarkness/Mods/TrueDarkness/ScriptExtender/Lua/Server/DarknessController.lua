@@ -150,7 +150,7 @@ function OnUnequipped(objectGuid, characterGuid)
     local item = Ext.Entity.Get(objectGuid)
 
     -- Check if item was unequipped into inventory and not dropped while equipped
-    if item and item.InventoryMember then
+    if item and item.InventoryMember and EntityHasStatus(objectGuid, "DARKNESS") then
         Osi.RemoveStatus(objectGuid, "DARKNESS")
         Log("Darkness parent unequipped: %s", objectGuid)
     end
