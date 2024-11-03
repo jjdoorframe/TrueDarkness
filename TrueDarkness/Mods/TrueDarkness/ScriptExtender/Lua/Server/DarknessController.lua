@@ -199,22 +199,32 @@ local function IsInDarknessAura(objectGuid, targetX, targetY, targetZ, threshold
 end
 
 --- Check if caster can see at a distance of the target
+---@alias SightCheckType "darkness" | "hadar"
 ---@param casterGuid string
+---@param checkType SightCheckType
 ---@param targetX number
 ---@param targetY number
 ---@param targetZ number
 ---@return boolean
-local function CasterCanSee(casterGuid, targetX, targetY, targetZ)
+local function CasterCanSee(casterGuid, checkType, targetX, targetY, targetZ)
     if casterGuid ~= nil then
         -- Check if caster has an ability to see in magical darkness
         -- Set max sight distance depending on the source
         local sightDistance
 
-        if EntityHasStatus(casterGuid, "TRUESIGHT") then
-            sightDistance = 36.5
-        elseif CharacterHasPassive(casterGuid, "DevilsSight") then
-            sightDistance = 24
-        elseif CharacterHasPassive(casterGuid, "FightingStyle_BlindFighting") then
+        if CharacterHasPassive(casterGuid, "Blindsight") then
+            return true
+        end
+
+        if checkType == "darkness" then
+            if EntityHasStatus(casterGuid, "TRUESIGHT") then
+                sightDistance = 36.5
+            elseif CharacterHasPassive(casterGuid, "DevilsSight") then
+                sightDistance = 24
+            end
+        end
+
+        if not sightDistance and CharacterHasPassive(casterGuid, "FightingStyle_BlindFighting") then
             sightDistance = 3
         else
             return false
@@ -252,11 +262,12 @@ function OnUsingSpellAtPosition(casterGuid, x, y, z, spell)
     if casterGuid ~= nil and DarknessPlaceSpells[spell] then
         local darknessRefs = DarknessParents
         local hadarRefs = HadarParents
+        
         -- Iterate over all active Darkness parent objects stored in persistence
         for objectGuid, _ in pairs(darknessRefs) do
             -- Check if spell target is inside Darkness aura of 5m
             if IsInDarknessAura(objectGuid, x, y, z, 5) then
-                if not CasterCanSee(casterGuid, x, y, z) then
+                if not CasterCanSee(casterGuid, "darkness", x, y, z) then
                     -- Apply overhead status "Spell requires sight!"
                     Osi.ApplyStatus(casterGuid, "CAST_INDARKNESS_FAILED", 0, 1) -- TODO find better UX
                     -- Cancel casting
@@ -269,12 +280,13 @@ function OnUsingSpellAtPosition(casterGuid, x, y, z, spell)
 
         -- Cancel cast if target is inside HoH
         for objectGuid, _ in pairs(hadarRefs) do
-            _D(objectGuid)
             if IsInDarknessAura(objectGuid, x, y, z, 6) then
-                Osi.ApplyStatus(casterGuid, "CAST_INDARKNESS_FAILED", 0, 1)
-                Osi.Freeze(casterGuid)
-                SetTimer(100, UnfreezeCaster, casterGuid)
-                return
+                if not CasterCanSee(casterGuid, "hadar", x, y, z) then
+                    Osi.ApplyStatus(casterGuid, "CAST_INDARKNESS_FAILED", 0, 1)
+                    Osi.Freeze(casterGuid)
+                    SetTimer(100, UnfreezeCaster, casterGuid)
+                    return
+                end
             end
         end
     end

@@ -8,11 +8,13 @@ end
 
 function TD_BlindFighting(entity)
     entity = entity or context.Source
-    return HasPassive('FightingStyle_BlindFighting', entity) & ~DistanceToGreaterThan(context.SourcePosition, context.TargetPosition, 3)
+    return Tagged('BLINDSIGHT', entity)
+    | (HasPassive('FightingStyle_BlindFighting', entity) & ~DistanceToGreaterThan(context.SourcePosition, context.TargetPosition, 3))
 end
 
 function TD_SpellCastingInDarkness(target, observer)
-    local result = (TD_BlindFighting(observer) | (~HasStatus('SG_Blinded', observer) & ~HasStatus('HEAVILY_OBSCURED_STATUS', target) & ~HasStatus('VOID_START', target))) & (TD_SeeDarkness(observer) | (~HasStatus('DARKNESS_STATUS', target) & ~HasStatus('DARKNESS_STATUS', observer)))
+    local result = (TD_BlindFighting(observer) | (~HasStatus('SG_Blinded', observer) & ~HasStatus('HEAVILY_OBSCURED_STATUS', target)))
+    & (TD_SeeDarkness(observer) | (~HasStatus('DARKNESS_STATUS', target) & ~HasStatus('DARKNESS_STATUS', observer)))
     return ConditionResult(result.Result, {ConditionError("TD_SpellCastingInDarkness_False")})
 end
 

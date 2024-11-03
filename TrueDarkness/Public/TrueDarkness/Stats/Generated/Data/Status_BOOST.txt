@@ -24,7 +24,8 @@ new entry "VOID_START"
 type "StatusData"
 data "StatusType" "BOOST"
 using "VOID_START"
-data "Boosts" "IF(not TD_BlindFighting()):Disadvantage(AttackTarget)"
+data "OnApplyFunctors" "ApplyStatus(VOID_BLINDED, 100, -1); ApplyStatus(HEAVILY_OBSCURED_STATUS, 100, -1)"
+data "OnRemoveFunctors" "RemoveStatus(VOID_BLINDED); RemoveStatus(HEAVILY_OBSCURED_STATUS)"
 
 // Status indicating that a character is heavily obscured
 new entry "HEAVILY_OBSCURED_STATUS"
@@ -37,7 +38,7 @@ data "DisplayName" "hb520ddae838b4ef985c3b8da4274c6e95g73;1"
 data "Description" "h2643f9dbb1664974ac555c5f0fedf0ee091b;1"
 data "Icon" "Action_WildMagic_GasCloud"
 // Forcing disadvantage because the target is unseen
-data "Boosts" "IF(not TD_BlindFighting()):Disadvantage(AttackTarget)"
+data "Boosts" "IF(not TD_BlindFighting()):Disadvantage(AttackTarget); IF(not TD_BlindFighting(context.Target)):Advantage(AttackRoll)"
 data "StatusPropertyFlags" "DisableOverhead;DisableCombatlog"
 
 // Darkness status that defines the gameplay within Darkness aura
