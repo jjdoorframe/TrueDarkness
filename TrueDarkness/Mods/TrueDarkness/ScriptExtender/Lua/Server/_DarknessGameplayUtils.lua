@@ -26,7 +26,7 @@ end
 ---@return boolean
 function CharacterHasPassive(guid, passiveName)
     local character = Ext.Entity.Get(guid)
-    if not character and not character.ServerCharacter then
+    if not character or not character.ServerCharacter then
         Log("Received guid is not a character: %s", guid)
         return false
     end
@@ -36,6 +36,30 @@ function CharacterHasPassive(guid, passiveName)
 
         for _, passiveEntity in ipairs(characterPassives) do
             if passiveEntity.Passive.PassiveId == passiveName then
+                return true
+            end
+        end
+    end
+
+    return false
+end
+
+---Check if character has a status immunity
+---@param guid string
+---@param immunityName string
+---@return boolean
+function CharacterHasImmunity(guid, immunityName)
+    local character = Ext.Entity.Get(guid)
+    if not character or not character.ServerCharacter then
+        Log("Received guid is not a character: %s", guid)
+        return false
+    end
+
+    if character.StatusImmunities and character.StatusImmunities.PersonalStatusImmunities then
+        local characterImmunities = character.StatusImmunities.PersonalStatusImmunities
+
+        for immunity, _ in pairs(characterImmunities) do
+            if immunity == immunityName then
                 return true
             end
         end

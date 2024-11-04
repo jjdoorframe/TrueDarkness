@@ -1,6 +1,6 @@
 function TD_SeeDarkness(entity)
     entity = entity or context.Source
-    return Tagged('BLINDSIGHT', entity)
+    return IsImmuneToStatus('SG_Blinded', entity)
         | (HasStatus('TRUESIGHT', entity) & ~DistanceToGreaterThan(context.SourcePosition, context.TargetPosition, 36.5))
         | (HasPassive('DevilsSight', entity) & ~DistanceToGreaterThan(context.SourcePosition, context.TargetPosition, 24))
         | (HasPassive('FightingStyle_BlindFighting', entity) & ~DistanceToGreaterThan(context.SourcePosition, context.TargetPosition, 3))
@@ -8,7 +8,7 @@ end
 
 function TD_BlindFighting(entity)
     entity = entity or context.Source
-    return Tagged('BLINDSIGHT', entity)
+    return IsImmuneToStatus('SG_Blinded', entity)
     | (HasPassive('FightingStyle_BlindFighting', entity) & ~DistanceToGreaterThan(context.SourcePosition, context.TargetPosition, 3))
 end
 

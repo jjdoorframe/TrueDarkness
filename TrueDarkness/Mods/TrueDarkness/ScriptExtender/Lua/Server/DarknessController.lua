@@ -212,10 +212,14 @@ local function CasterCanSee(casterGuid, checkType, targetX, targetY, targetZ)
         -- Set max sight distance depending on the source
         local sightDistance
 
-        if CharacterHasPassive(casterGuid, "Blindsight") then
+        -- Always allow casting spells with blind immunity
+        -- Changed from "Blindsight" for item support
+        if CharacterHasImmunity(casterGuid, "SG_Blinded") then
             return true
         end
 
+        -- Check each ability in reverse order of sight distance
+        -- Truesight and Devil's Sight only allow seeing in magical darkness, not HoH
         if checkType == "darkness" then
             if EntityHasStatus(casterGuid, "TRUESIGHT") then
                 sightDistance = 36.5
@@ -224,6 +228,8 @@ local function CasterCanSee(casterGuid, checkType, targetX, targetY, targetZ)
             end
         end
 
+        -- Blind Fighting gives Blindsight up to 10ft/3m
+        -- Only check if creature doesn't have a better ability
         if not sightDistance and CharacterHasPassive(casterGuid, "FightingStyle_BlindFighting") then
             sightDistance = 3
         elseif not sightDistance then
