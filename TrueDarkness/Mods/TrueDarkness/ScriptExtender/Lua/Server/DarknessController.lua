@@ -226,7 +226,7 @@ local function CasterCanSee(casterGuid, checkType, targetX, targetY, targetZ)
 
         if not sightDistance and CharacterHasPassive(casterGuid, "FightingStyle_BlindFighting") then
             sightDistance = 3
-        else
+        elseif not sightDistance then
             return false
         end
 
