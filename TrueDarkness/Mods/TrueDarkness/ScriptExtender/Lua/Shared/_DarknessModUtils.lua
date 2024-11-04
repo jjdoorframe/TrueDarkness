@@ -43,7 +43,7 @@ end
 
 -- Loads persisted ModVar table of items with active Darkness applied
 function LoadPersistence()
-    local modVars = Ext.Vars.GetModVariables(ModuleUUID)
+    local modVars = Ext.Vars.GetModVariables(ModuleUUID)    -- TODO Switch to single ModVar with dynamic distance calculation to support class mods
     if modVars then
         if modVars.DarknessParents then
             DarknessParents = modVars.DarknessParents
@@ -60,9 +60,18 @@ function LoadPersistence()
             HadarParents = {}
             Log("PERSISTENCE: HADAR PARENTS EMPTY - INITIALIZING")
         end 
+
+        if modVars.SharDarknessParents then
+            SharDarknessParents = modVars.SharDarknessParents
+            Log("PERSISTENCE: SHAR DARKNESS PARENTS LOADED")
+        else
+            SharDarknessParents = {}
+            Log("PERSISTENCE: SHAR DARKNESS PARENTS EMPTY - INITIALIZING")
+        end 
     else
         DarknessParents = {}
         HadarParents = {}
+        SharDarknessParents = {}
         Log("PERSISTENCE: FAILED MODVAR LOAD - INITIALIZING")
     end
 end
@@ -80,6 +89,13 @@ function SavePersistence()
         Log("PERSISTENCE: HADAR PARENTS SAVED")
     else
         Log("PERSISTENCE: NO HADAR PARENTS TO SAVE")
+    end
+
+    if SharDarknessParents then
+        Ext.Vars.GetModVariables(ModuleUUID).SharDarknessParents = SharDarknessParents
+        Log("PERSISTENCE: SHAR DARKNESS PARENTS SAVED")
+    else
+        Log("PERSISTENCE: NO SHAR DARKNESS PARENTS TO SAVE")
     end
 end
 

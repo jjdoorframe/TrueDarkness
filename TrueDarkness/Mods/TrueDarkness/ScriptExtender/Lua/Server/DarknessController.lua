@@ -34,6 +34,10 @@ function OnStatusApplied(objectGuid, status)
         -- Doesn't need any checks because status is only ever applied to helper object
         HadarParents[objectGuid] = true
         Log("Hunger of Hadar spawned into world: %s", objectGuid)
+    elseif status == "DARKNESS_SHAR" then
+        -- Store unque Darkness spawned by Shar's Spear of Evening
+        SharDarknessParents[objectGuid] = true
+        Log("Shar Darkness spawned into world: %s", objectGuid)
     end
 end
 
@@ -84,6 +88,10 @@ function OnStatusRemoved(objectGuid, status)
     elseif status == "VOID_AURA" then
         HadarParents[objectGuid] = nil
         Log("Hunger of Hadar was destroyed: %s", objectGuid)
+        SavePersistence()
+    elseif status == "DARKNESS_SHAR" then
+        SharDarknessParents[objectGuid] = nil
+        Log("Shar Darkness was destroyed: %s", objectGuid)
         SavePersistence()
     elseif status == "DANCING_LIGHTS" then
         -- Darknss removes statuses from light spells <= lvl 2 using aura
@@ -264,11 +272,12 @@ local function UnfreezeCaster(casterGuid)
 end
 
 -- Check if a spell that targets a place is being cast inside Darkness
-function OnUsingSpellAtPosition(casterGuid, x, y, z, spell)
+function OnUsingSpellAtPosition(casterGuid, x, y, z, spell) -- TODO Switch to dynamic distance based on parent status
     if casterGuid ~= nil and DarknessPlaceSpells[spell] then
         local darknessRefs = DarknessParents
+        local shadDarknessRefs = SharDarknessParents
         local hadarRefs = HadarParents
-        
+
         -- Iterate over all active Darkness parent objects stored in persistence
         for objectGuid, _ in pairs(darknessRefs) do
             -- Check if spell target is inside Darkness aura of 5m
@@ -277,6 +286,18 @@ function OnUsingSpellAtPosition(casterGuid, x, y, z, spell)
                     -- Apply overhead status "Spell requires sight!"
                     Osi.ApplyStatus(casterGuid, "CAST_INDARKNESS_FAILED", 0, 1) -- TODO find better UX
                     -- Cancel casting
+                    Osi.Freeze(casterGuid)
+                    SetTimer(100, UnfreezeCaster, casterGuid)
+                    return
+                end
+            end
+        end
+
+        -- Iterate over active Darkness parents spawned by Shar's Spear of Evening
+        for objectGuid, _ in pairs(shadDarknessRefs) do
+            if IsInDarknessAura(objectGuid, x, y, z, 3) then
+                if not CasterCanSee(casterGuid, "darkness", x, y, z) then
+                    Osi.ApplyStatus(casterGuid, "CAST_INDARKNESS_FAILED", 0, 1)
                     Osi.Freeze(casterGuid)
                     SetTimer(100, UnfreezeCaster, casterGuid)
                     return

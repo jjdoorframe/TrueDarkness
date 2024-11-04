@@ -52,6 +52,15 @@ data "Boosts" "GameplayObscurity(5)"
 data "StatusPropertyFlags" "IndicateDarkness;BringIntoCombat;InitiateCombat;DisableOverhead;DisableCombatlog;DisablePortraitIndicator"
 data "StatusEffect" "7209c298-1c34-407d-882f-dd0cd7d57adb"
 
+// Darkness status for effect spawned by Shar's Spear of Evening
+new entry "DARKNESS_SHAR"
+type "StatusData"
+data "StatusType" "BOOST"
+using "DARKNESS"
+data "AuraRadius" "3"
+data "Boosts" "GameplayObscurity(3)"
+data "StatusEffect" "5960de25-1bf9-4485-a08b-863404733d51"
+
 // Status applied to objects when Darkness is cast as enchantment
 new entry "DARKNESS_TECHNICAL"
 type "StatusData"
