@@ -6,6 +6,7 @@ type "SpellData"
 data "SpellType" "Projectile"
 using "Projectile_ArrowOfDarkness"
 data "SpellProperties" "GROUND:Spawn(e01e030a-b0fe-4515-b5d1-b2365029c715,,DARKNESS_ARROW)"
+data "TooltipStatusApply" "ApplyStatus(DARKNESS_SPELLSTATUS,100,100)"
 
 // Temp solution until I make new VFX
 new entry "Projectile_SleetStorm_FogCloud"

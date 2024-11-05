@@ -46,6 +46,10 @@ new entry "DARKNESS"
 type "StatusData"
 data "StatusType" "BOOST"
 data "StackId" "DARKNESS"
+// Darkness
+data "DisplayName" "h7a191deagde7ag4ae9g3a09gb781fcff8b65;1"
+data "Description" "h3b7500badf294db39695c212e0fe4e97a115;4"
+data "Icon" "Spell_Evocation_Darkness"
 data "AuraRadius" "5"
 data "AuraStatuses" "TARGET:IF(Character()):ApplyStatus(BLINDED_DARKNESS,100,-1);TARGET:IF(Character()):ApplyStatus(DARKNESS_STATUS,100,-1);TARGET:IF(Character() or Item()):ApplyStatus(LIGHT_REMOVE,100,-1)"
 data "Boosts" "GameplayObscurity(5)"
@@ -165,3 +169,12 @@ using "SLEET_STORM"
 data "AuraStatuses" "TARGET:IF(Character()):ApplyStatus(HEAVILY_OBSCURED_STATUS,100,-1);TARGET:IF(Character()):ApplyStatus(BLINDED,100,-1)"
 data "TickFunctors" "CreateExplosion(Projectile_SleetStorm_WaterFrozen); CreateExplosion(Projectile_SleetStorm_FogCloud)"
 data "OnApplyFunctors" "CreateExplosion(Projectile_SleetStorm_WaterFrozen); CreateExplosion(Projectile_SleetStorm_FogCloud)"
+
+// Empty status for displaying Darkness in item and spell tooltips
+new entry "DARKNESS_SPELLSTATUS"
+type "StatusData"
+data "StatusType" "BOOST"
+// Darkness
+data "DisplayName" "h7a191deagde7ag4ae9g3a09gb781fcff8b65;1"
+data "Description" "hbc2ecd5egd9a9g4fa8g8486g91bd783691c6;1"
+data "Icon" "Spell_Evocation_Darkness"
