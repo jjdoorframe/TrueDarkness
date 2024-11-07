@@ -14,7 +14,3 @@ Ext.Vars.RegisterModVariable(ModuleUUID, "DarknessParents", {
 Ext.Vars.RegisterModVariable(ModuleUUID, "HadarParents", {
     Server = true
 })
-
-Ext.Vars.RegisterModVariable(ModuleUUID, "SharDarknessParents", {
-    Server = true
-})

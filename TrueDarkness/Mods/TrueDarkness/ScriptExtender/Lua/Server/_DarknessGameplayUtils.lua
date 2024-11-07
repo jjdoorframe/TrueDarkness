@@ -2,22 +2,26 @@
 ---@type string
 DarknessHelperObject = "bdddd432-a5fd-4110-bfc2-90d7792631a0"
 
----Check if entity has status
+---Return user status that's using a mod's status
 ---@param guid string
----@param statusName string
----@return boolean
-function EntityHasStatus(guid, statusName)
+---@param statusIn string
+---@return string | nil
+function GetEntityStatus(guid, statusIn)
     local entity = Ext.Entity.Get(guid)
 
     if entity and entity.StatusContainer and entity.StatusContainer.Statuses then
-        for _, status in pairs(entity.StatusContainer.Statuses) do
-            if status == statusName then
-                return true
+        local entityStatuses = entity.StatusContainer.Statuses
+
+        for _, statusId in pairs(entityStatuses) do
+            local status = Ext.Stats.Get(statusId)
+
+            if statusId == statusIn or (status and status.Using and status.Using == statusIn) then
+                return statusId
             end
         end
     end
 
-    return false
+    return nil
 end
 
 ---Check if character has passive
@@ -26,6 +30,7 @@ end
 ---@return boolean
 function CharacterHasPassive(guid, passiveName)
     local character = Ext.Entity.Get(guid)
+
     if not character or not character.ServerCharacter then
         Log("Received guid is not a character: %s", guid)
         return false
@@ -50,6 +55,7 @@ end
 ---@return boolean
 function CharacterHasImmunity(guid, immunityName)
     local character = Ext.Entity.Get(guid)
+
     if not character or not character.ServerCharacter then
         Log("Received guid is not a character: %s", guid)
         return false

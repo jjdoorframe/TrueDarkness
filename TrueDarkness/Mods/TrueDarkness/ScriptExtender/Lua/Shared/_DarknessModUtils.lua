@@ -60,14 +60,6 @@ function LoadPersistence()
             HadarParents = {}
             Log("PERSISTENCE: HADAR PARENTS EMPTY - INITIALIZING")
         end 
-
-        if modVars.SharDarknessParents then
-            SharDarknessParents = modVars.SharDarknessParents
-            Log("PERSISTENCE: SHAR DARKNESS PARENTS LOADED")
-        else
-            SharDarknessParents = {}
-            Log("PERSISTENCE: SHAR DARKNESS PARENTS EMPTY - INITIALIZING")
-        end 
     else
         DarknessParents = {}
         HadarParents = {}
@@ -84,18 +76,13 @@ function SavePersistence()
         Log("PERSISTENCE: NO DARKNESS PARENTS TO SAVE")
     end
 
+    _D(DarknessParents)
+
     if HadarParents then
         Ext.Vars.GetModVariables(ModuleUUID).HadarParents = HadarParents
         Log("PERSISTENCE: HADAR PARENTS SAVED")
     else
         Log("PERSISTENCE: NO HADAR PARENTS TO SAVE")
-    end
-
-    if SharDarknessParents then
-        Ext.Vars.GetModVariables(ModuleUUID).SharDarknessParents = SharDarknessParents
-        Log("PERSISTENCE: SHAR DARKNESS PARENTS SAVED")
-    else
-        Log("PERSISTENCE: NO SHAR DARKNESS PARENTS TO SAVE")
     end
 end
 

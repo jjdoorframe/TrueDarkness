@@ -72,6 +72,7 @@ data "StatusType" "BOOST"
 // Darkness
 data "DisplayName" "h7a191deagde7ag4ae9g3a09gb781fcff8b65;1"
 data "Icon" "Spell_Evocation_Darkness"
+data "AuraRadius" "5"
 data "OnApplyFunctors" "ApplyStatus(DARKNESS,100,-1)"
 data "OnRemoveFunctors" "RemoveStatus(DARKNESS)"
 data "StatusPropertyFlags" "DisableCombatlog"
