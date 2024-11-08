@@ -18,6 +18,7 @@ function OnStatusApplied(objectGuid, statusId)
         DarknessParents[objectGuid] = {
             Radius = status.AuraRadius,
             Darkness = statusDarkness,
+            Type = "Darkness",
             Active = true
         }
 
@@ -50,6 +51,7 @@ function OnStatusApplied(objectGuid, statusId)
                 DarknessParents[objectGuid] = {
                     Radius = status.AuraRadius,
                     Darkness = statusId,
+                    Type = "Darkness",
                     Active = true
                 }
 
@@ -60,11 +62,15 @@ function OnStatusApplied(objectGuid, statusId)
         else
             Log("Failed to get template id of: %s", objectGuid)
         end
-
     elseif statusId == "VOID_AURA" then
         -- Store Hunger of Harad in persistence
         -- Doesn't need any checks because status is only ever applied to helper object
-        HadarParents[objectGuid] = true
+        DarknessParents[objectGuid] = {
+            Radius = status.AuraRadius,
+            Type = "Hadar",
+            Active = true
+        }
+
         SavePersistence()
 
         Log("Hunger of Hadar spawned into world: %s", objectGuid)
@@ -151,7 +157,7 @@ function OnStatusRemoved(objectGuid, statusId)
             end
         end
     elseif statusId == "VOID_AURA" then
-        HadarParents[objectGuid] = nil
+        DarknessParents[objectGuid] = nil
 
         Log("Hunger of Hadar was destroyed: %s", objectGuid)
         SavePersistence()
@@ -271,7 +277,7 @@ function OnUnequipped(objectGuid, characterGuid)
     if GetEntityStatus(objectGuid, "DARKNESS_TECHNICAL") then
         local characterWeapons = GetAllCharacterWeaponGuids(characterGuid)
 
-        for weapon, v in pairs(characterWeapons) do
+        for weapon, _ in pairs(characterWeapons) do
             Osi.RemoveStatus(weapon, statusDarkness)
             Log("Removed DARKNESS from secondary weapon: %s", weapon)
         end
@@ -305,7 +311,7 @@ local function IsInDarknessAura(objectGuid, targetX, targetY, targetZ, threshold
 end
 
 --- Check if caster can see at a distance of the target
----@alias SightCheckType "darkness" | "hadar"
+---@alias SightCheckType "Darkness" | "Hadar"
 ---@param casterGuid string
 ---@param checkType SightCheckType
 ---@param targetX number
@@ -326,7 +332,7 @@ local function CasterCanSee(casterGuid, checkType, targetX, targetY, targetZ)
 
         -- Check each ability in reverse order of sight distance
         -- Truesight and Devil's Sight only allow seeing in magical darkness, not HoH
-        if checkType == "darkness" then
+        if checkType == "Darkness" then
             if GetEntityStatus(casterGuid, "TRUESIGHT") then
                 sightDistance = 36.5
             elseif CharacterHasPassive(casterGuid, "DevilsSight") then
@@ -372,31 +378,18 @@ local function UnfreezeCaster(casterGuid)
 end
 
 -- Check if a spell that targets a place is being cast inside Darkness
-function OnUsingSpellAtPosition(casterGuid, x, y, z, spell) -- TODO Switch to dynamic distance based on parent status
+function OnUsingSpellAtPosition(casterGuid, x, y, z, spell)
     if casterGuid ~= nil and DarknessPlaceSpells[spell] then
         local darknessRefs = DarknessParents
-        local hadarRefs = HadarParents
 
         -- Iterate over all active Darkness parent objects stored in persistence
         for objectGuid, data in pairs(darknessRefs) do
             -- Check if spell target is inside Darkness aura of 5m
             if data.Active and IsInDarknessAura(objectGuid, x, y, z, data.Radius) then
-                if not CasterCanSee(casterGuid, "darkness", x, y, z) then
+                if not CasterCanSee(casterGuid, data.Type, x, y, z) then
                     -- Apply overhead status "Spell requires sight!"
                     Osi.ApplyStatus(casterGuid, "CAST_INDARKNESS_FAILED", 0, 1) -- TODO find better UX
                     -- Cancel casting
-                    Osi.Freeze(casterGuid)
-                    SetTimer(100, UnfreezeCaster, casterGuid)
-                    return
-                end
-            end
-        end
-
-        -- Cancel cast if target is inside HoH
-        for objectGuid, _ in pairs(hadarRefs) do
-            if IsInDarknessAura(objectGuid, x, y, z, 6) then
-                if not CasterCanSee(casterGuid, "hadar", x, y, z) then
-                    Osi.ApplyStatus(casterGuid, "CAST_INDARKNESS_FAILED", 0, 1)
                     Osi.Freeze(casterGuid)
                     SetTimer(100, UnfreezeCaster, casterGuid)
                     return
