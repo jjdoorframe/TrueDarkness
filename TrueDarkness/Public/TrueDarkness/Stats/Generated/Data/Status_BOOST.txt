@@ -98,20 +98,12 @@ data "StatusType" "BOOST"
 data "OnApplyFunctors" "ApplyStatus(DARKNESS_TECHNICAL,100,100);RemoveStatus(DARKNESS_ARROW)"
 data "StatusPropertyFlags" "DisableOverhead;DisableCombatlog;DisablePortraitIndicator"
 
-// Helper status for dispeling Darknes applied to objects
-new entry "DARKNESS_OBJECT_REMOVE"
-type "StatusData"
-data "StatusType" "BOOST"
-data "StackId" "DARKNESS_OBJECT_REMOVE"
-data "OnApplyFunctors" "RemoveStatus(DARKNESS_TECHNICAL)"
-data "StatusPropertyFlags" "DisableOverhead;DisableCombatlog;DisablePortraitIndicator"
-
 // Helper status for dispeling Darkness with Daylight
 new entry "DARKNESS_REMOVE"
 type "StatusData"
 data "StatusType" "BOOST"
 data "StackId" "DARKNESS_REMOVE"
-data "OnApplyFunctors" "IF(Character()):ApplyEquipmentStatus(MainHand,DARKNESS_OBJECT_REMOVE,100,0);RemoveStatus(DARKNESS);RemoveStatus(DARKNESS_TECHNICAL)"
+data "OnApplyFunctors" "IF(Character()):ApplyEquipmentStatus(MainHand,DARKNESS_REMOVE,100,0)"
 data "StatusPropertyFlags" "DisableOverhead;DisableCombatlog;DisablePortraitIndicator"
 
 // Added aura to Daylight that removes Darkness

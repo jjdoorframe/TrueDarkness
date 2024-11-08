@@ -68,6 +68,19 @@ function OnStatusApplied(objectGuid, statusId)
         SavePersistence()
 
         Log("Hunger of Hadar spawned into world: %s", objectGuid)
+    elseif statusId == "DARKNESS_REMOVE" then
+        local statusDarkness = GetEntityStatus(objectGuid, "DARKNESS")
+        local statusTechnical = GetEntityStatus(objectGuid, "DARKNESS_TECHNICAL")
+
+        if statusTechnical then
+            Osi.RemoveStatus(objectGuid, statusTechnical)
+
+            Log("Daylight dispelled Darkness from item: %s", objectGuid)
+        elseif statusDarkness then
+            Osi.RemoveStatus(objectGuid, statusDarkness)
+
+            Log("Daylight dispelled Darkness from: %s", objectGuid)
+        end
     end
 end
 
