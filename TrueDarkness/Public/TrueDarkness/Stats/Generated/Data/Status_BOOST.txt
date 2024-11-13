@@ -171,3 +171,37 @@ data "StatusType" "BOOST"
 data "DisplayName" "h7a191deagde7ag4ae9g3a09gb781fcff8b65;1"
 data "Description" "hbc2ecd5egd9a9g4fa8g8486g91bd783691c6;1"
 data "Icon" "Spell_Evocation_Darkness"
+
+// Darkness used by Viconia's divine intervention
+new entry "DARKNESS_HOUSEOFGRIEF"
+type "StatusData"
+data "StatusType" "BOOST"
+using "DARKNESS"
+data "AuraRadius" "8"
+data "Boosts" "GameplayObscurity(8)"
+data "StatusEffect" "91ae0a56-ff39-4813-84dd-a64c4f54feb7"
+
+// Darkness used by Justiciar's Greatshield
+new entry "DARKNESS_INKBLOT"
+type "StatusData"
+data "StatusType" "BOOST"
+using "DARKNESS"
+data "AuraRadius" "2"
+data "Boosts" "GameplayObscurity(2)"
+data "StatusEffect" "6940b060-7080-499f-b6cc-b35522ad03bd"
+
+new entry "DARKNESS_INKBLOT_TECHNICAL"
+type "StatusData"
+data "StatusType" "BOOST"
+using "DARKNESS_TECHNICAL"
+data "AuraRadius" "2"
+data "OnApplyFunctors" "ApplyStatus(DARKNESS_INKBLOT,100,-1)"
+data "OnRemoveFunctors" "RemoveStatus(DARKNESS_INKBLOT)"
+
+// Helper status for spawning Darkness from Raven fly action
+new entry "DARKNESS_SHAR_TECHNICAL"
+type "StatusData"
+data "StatusType" "BOOST"
+// Using the same Darkness as Shar's Spear of Evening because it's the same radius
+data "OnApplyFunctors" "ApplyStatus(DARKNESS_SHAR,100,2);RemoveStatus(DARKNESS_RAVEN)"
+data "StatusPropertyFlags" "DisableOverhead;DisableCombatlog;DisablePortraitIndicator"

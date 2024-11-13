@@ -1,0 +1,11 @@
+new entry "Shout_LOW_HouseOfGrief_DivineIntervention"
+type "SpellData"
+data "SpellType" "Shout"
+using "Shout_LOW_HouseOfGrief_DivineIntervention"
+data "SpellProperties" "GROUND:Summon(bdddd432-a5fd-4110-bfc2-90d7792631a0, 2,,,Darkness,DARKNESS_HOUSEOFGRIEF);"
+
+new entry "Shout_Inkblot"
+type "SpellData"
+data "SpellType" "Shout"
+using "Shout_Inkblot"
+data "SpellProperties" "ApplyEquipmentStatus(MainHand,DARKNESS_INKBLOT_TECHNICAL,100,2);IF(not HasStatus('SNEAKING')):ApplyStatus(SNEAKING,100,-1)"
