@@ -1,6 +1,5 @@
 -- Credit: Zerd (https://www.nexusmods.com/baldursgate3/mods/1329)
 -- For defining recursive checks that find spells related to root
-
 ---Recursively check and add interrupts to a table
 ---@param interruptsIn table
 ---@param spellGroup table
@@ -45,8 +44,12 @@ local function AddSpellsToTable(spellTableIn, spellTableIgnore, spell, spellGrou
         return true
     end
 
-    if spell.SpellFlags then
-        for _, v in pairs(spell.SpellFlags) do
+    local hasFlags, spellFlags = pcall(function()
+        return spell.SpellFlags
+    end)
+
+    if hasFlags and spellFlags then
+        for _, v in pairs(spellFlags) do
             if v == "IsTrap" then
                 return false
             end

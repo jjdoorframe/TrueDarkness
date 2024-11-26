@@ -385,7 +385,7 @@ function OnUsingSpellAtPosition(casterGuid, x, y, z, spell)
         -- Iterate over all active Darkness parent objects stored in persistence
         for objectGuid, data in pairs(darknessRefs) do
             -- Check if spell target is inside Darkness aura of 5m
-            if data.Active and IsInDarknessAura(objectGuid, x, y, z, data.Radius) then
+            if data and data.Active and IsInDarknessAura(objectGuid, x, y, z, data.Radius) then
                 if not CasterCanSee(casterGuid, data.Type, x, y, z) then
                     -- Apply overhead status "Spell requires sight!"
                     Osi.ApplyStatus(casterGuid, "CAST_INDARKNESS_FAILED", 0, 1) -- TODO find better UX
