@@ -2,7 +2,9 @@ function TD_SeeDarkness(entity)
     entity = entity or context.Source
     return IsImmuneToStatus('SG_Blinded', entity)
         | (HasStatus('TRUESIGHT', entity) & ~DistanceToGreaterThan(context.SourcePosition, context.TargetPosition, 36.5))
-        | (HasPassive('DevilsSight', entity) & ~DistanceToGreaterThan(context.SourcePosition, context.TargetPosition, 24))
+        | (HasPassive('EYES_OF_THE_DARK', entity) & ~DistanceToGreaterThan(context.SourcePosition, context.TargetPosition, 36))
+        | ((HasPassive('DevilsSight', entity) | (HasPassive('SlayersEyes', entity))) & ~DistanceToGreaterThan(context.SourcePosition, context.TargetPosition, 24))
+        | ((HasPassive('DARK_ONES_EYE', entity) | (HasStatus('DARK_ONES_EYE_ALLY', entity))) & ~DistanceToGreaterThan(context.SourcePosition, context.TargetPosition, 18))
         | (HasPassive('FightingStyle_BlindFighting', entity) & ~DistanceToGreaterThan(context.SourcePosition, context.TargetPosition, 3))
 end
 
