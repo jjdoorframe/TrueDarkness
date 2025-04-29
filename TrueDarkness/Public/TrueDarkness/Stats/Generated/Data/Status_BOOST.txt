@@ -9,6 +9,9 @@ using "BLINDED"
 data "Description" "h5c55526f9fa245028ae5fd714d69378d1aca;1"
 // Support for mods that introduce FightingStyle_BlindFighting to work correctly at 10ft distance
 data "Boosts" "IF(not TD_BlindFighting()):Disadvantage(AttackRoll); IF(not TD_BlindFighting(context.Target)):Advantage(AttackTarget)"
+data "SoundVocalStart" ""
+data "SoundLoop" ""
+data "SoundStop" ""
 
 // Blinded by Hunger of Hadar
 // BG3 used BLINDED_DARKNESS here, making Devil's Sight work inside HoH
@@ -205,3 +208,37 @@ data "StatusType" "BOOST"
 // Using the same Darkness as Shar's Spear of Evening because it's the same radius
 data "OnApplyFunctors" "ApplyStatus(DARKNESS_SHAR,100,2);RemoveStatus(DARKNESS_RAVEN)"
 data "StatusPropertyFlags" "DisableOverhead;DisableCombatlog;DisablePortraitIndicator"
+
+// Unique statuses for darkness cast by the new Shadow Sorcerer subclass
+new entry "BLINDED_DARKNESS_SORCERER"
+type "StatusData"
+data "StatusType" "BOOST"
+using "BLINDED"
+
+new entry "DARKNESS_STATUS_SORCERER"
+type "StatusData"
+data "StatusType" "BOOST"
+using "DARKNESS_STATUS"
+data "Boosts" "IF(not TD_SeeDarkness() and not HasStatus('EYESOFTHEDARK_DARKNESS', context.Source)):Disadvantage(AttackTarget); IF(not TD_SeeDarkness(context.Target)):Advantage(AttackRoll)"
+
+new entry "DARKNESS_SORCERER"
+type "StatusData"
+data "StatusType" "BOOST"
+using "DARKNESS"
+data "AuraStatuses" "TARGET:IF(Character()):ApplyStatus(BLINDED_DARKNESS_SORCERER,100,-1);TARGET:IF(Character()):ApplyStatus(DARKNESS_STATUS_SORCERER,100,-1);TARGET:IF(Character() or Item()):ApplyStatus(LIGHT_REMOVE,100,-1)"
+
+new entry "DARKNESS_TECHNICAL_SORCERER"
+type "StatusData"
+data "StatusType" "BOOST"
+using "DARKNESS_TECHNICAL"
+data "OnApplyFunctors" "ApplyStatus(DARKNESS_SORCERER,100,-1)"
+data "OnRemoveFunctors" "RemoveStatus(DARKNESS_SORCERER)"
+
+// Now correctly allows seeing only in the darkness cast by the shadow sorcerer
+// Having 2 shadow sorcerers in a party still means they can see in each other's darkness
+// Solving it is an overkill, would be as much work as this whole mod
+new entry "EYESOFTHEDARK_DARKNESS"
+type "StatusData"
+data "StatusType" "BOOST"
+using "EYESOFTHEDARK_DARKNESS"
+data "Boosts" "DarkvisionRangeMin(24);ActiveCharacterLight(c46e7ba8-e746-7020-5146-287474d7b9f7);StatusImmunity(BLINDED_DARKNESS_SORCERER);IgnoreSurfaceCover(SurfaceDarknessCloud)"
