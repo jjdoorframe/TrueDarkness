@@ -9,6 +9,11 @@ using "BLINDED"
 data "Description" "h5c55526f9fa245028ae5fd714d69378d1aca;1"
 // Support for mods that introduce FightingStyle_BlindFighting to work correctly at 10ft distance
 data "Boosts" "IF(not TD_BlindFighting()):Disadvantage(AttackRoll); IF(not TD_BlindFighting(context.Target)):Advantage(AttackTarget)"
+
+new entry "BLINDED_DARKNESS"
+type "StatusData"
+data "StatusType" "BOOST"
+using "BLINDED_DARKNESS"
 data "SoundVocalStart" ""
 data "SoundLoop" ""
 data "SoundStop" ""
