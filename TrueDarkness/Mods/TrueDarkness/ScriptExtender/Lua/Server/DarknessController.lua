@@ -1,17 +1,12 @@
 function OnStatusApplied(objectGuid, statusId)
     local status = Ext.Stats.Get(statusId)
-    local isDarknessSummon = false
-    local isDarknessItem = false
 
-    if status and status.AuraRadius ~= "" then
-        if statusId == "DARKNESS" or (status.Using and status.Using == "DARKNESS") then
-            isDarknessSummon = true
-        elseif statusId == "DARKNESS_TECHNICAL" or (status.Using and status.Using == "DARKNESS_TECHNICAL") then
-            isDarknessItem = true
-        end
+    if not status or status.AuraRadius == "" then
+        Log("Failed to get status: %s", statusId)
+        return
     end
 
-    if isDarknessItem then
+    if statusId == "DARKNESS_TECHNICAL" or (status.Using and status.Using == "DARKNESS_TECHNICAL") then
         -- Store items that have active Darkness statuses in a persistent ModVar
         local statusDarkness = GetEntityStatus(objectGuid, "DARKNESS")
 
@@ -40,7 +35,7 @@ function OnStatusApplied(objectGuid, statusId)
         else
             Log("Failed to get weapon wielder for: %s", objectGuid)
         end
-    elseif isDarknessSummon then
+    elseif statusId == "DARKNESS" or (status.Using and status.Using == "DARKNESS") then
         -- Store Darkness helper objects summoned by the spell in a persistent ModVar
         local entity = Ext.Entity.Get(objectGuid)
 
@@ -108,18 +103,13 @@ end
 
 function OnStatusRemoved(objectGuid, statusId)
     local status = Ext.Stats.Get(statusId)
-    local isDarknessSummon = false
-    local isDarknessItem = false
 
-    if status and status.AuraRadius then
-        if statusId == "DARKNESS" or (status.Using and status.Using == "DARKNESS") then
-            isDarknessSummon = true
-        elseif statusId == "DARKNESS_TECHNICAL" or (status.Using and status.Using == "DARKNESS_TECHNICAL") then
-            isDarknessItem = true
-        end
+    if not status or status.AuraRadius == "" then
+        Log("Failed to get status: %s", statusId)
+        return
     end
 
-    if isDarknessItem then
+    if statusId == "DARKNESS_TECHNICAL" or (status.Using and status.Using == "DARKNESS_TECHNICAL") then
         -- Remove Darkness items from persistence on status removed
         local statusDarkness = DarknessParents[objectGuid].Darkness
 
@@ -130,7 +120,7 @@ function OnStatusRemoved(objectGuid, statusId)
 
         -- Remove Darkness from all equipped weapons
         local characterGuid = GetWeaponWielderGuid(objectGuid)
-        
+
         if characterGuid then
             local characterWeapons = GetAllCharacterWeaponGuids(characterGuid)
 
@@ -142,7 +132,7 @@ function OnStatusRemoved(objectGuid, statusId)
         else
             Log("Failed to get weapon wielder for: %s", objectGuid)
         end
-    elseif isDarknessSummon then
+    elseif statusId == "DARKNESS" or (status.Using and status.Using == "DARKNESS") then
         local entity = Ext.Entity.Get(objectGuid)
 
         if entity and entity.ServerItem and entity.ServerItem.Template and entity.ServerItem.Template.Id then
@@ -178,7 +168,7 @@ function OnStatusRemoved(objectGuid, statusId)
     elseif statusId == "FLAME_BLADE" then
         if Ext.Entity.Get(objectGuid) then
             Osi.Die(objectGuid)
-            
+
             Log("Destroyed Flame Blade item")
         end
     end
@@ -220,7 +210,11 @@ end
 
 function OnEquipped(objectGuid, characterGuid)
     local item = Ext.Entity.Get(objectGuid)
-    local statusDarkness
+    local statusDarkness = GetEntityStatus(objectGuid, "DARKNESS")
+
+    if statusDarkness then
+        Osi.RemoveStatus(objectGuid, statusDarkness)
+    end
 
     if GetEntityStatus(objectGuid, "DARKNESS_TECHNICAL") then
         -- Apply Darkness when item is equipped
@@ -250,7 +244,7 @@ function OnEquipped(objectGuid, characterGuid)
                 if itemInventory == darknessItem.InventoryMember.Inventory then
                     statusDarkness = DarknessParents[darknessItemGuid].Darkness
                     Osi.ApplyStatus(objectGuid, statusDarkness, -1, 1)
-                    
+
                     Log("Applied DARKNESS on secondary weapon: %s", objectGuid)
                 end
             end
@@ -401,6 +395,65 @@ function OnUsingSpellAtPosition(casterGuid, x, y, z, spell)
             end
         end
     end
+end
+
+function ClearOutdatedDarkness()
+    local entities = Ext.Entity.GetAllEntitiesWithComponent("StatusContainer")
+    local outdatedDarkness = {}
+
+    for _, entity in pairs(entities) do
+        local entityGuid = Ext.Entity.HandleToUuid(entity)
+
+        if entityGuid == nil then
+            Log("Failed to get entity guid")
+            return
+        end
+
+        if GetEntityStatus(entityGuid, "DARKNESS") and DarknessParents[entityGuid] == nil then
+            local character = GetWeaponWielderGuid(entityGuid)
+
+            if character then
+                local characterWeapons = GetAllCharacterWeaponGuids(character)
+                local darknessValid = false
+
+                for weapon, _ in pairs(characterWeapons) do
+                    if DarknessParents[weapon] and DarknessParents[weapon].Active == true then
+                        darknessValid = true
+                        break
+                    end
+                end
+
+                if darknessValid == false then
+                    -- Remove Darkness status from the entity if it doesn't have a valid Darkness parent
+                    Osi.RemoveStatus(entityGuid, "DARKNESS")
+                    Log("Removed DARKNESS from entity: %s", entityGuid)
+                end
+            else
+                -- If not a weapon or no character found, remove the status
+                Osi.RemoveStatus(entityGuid, "DARKNESS")
+                Log("Removed orphaned DARKNESS from entity: %s", entityGuid)
+            end
+        end
+    end
+
+    for darknessGuid, data in pairs(DarknessParents) do
+        -- Check if the entity still exists
+        if Ext.Entity.Get(darknessGuid) == nil then
+            table.insert(outdatedDarkness, darknessGuid)
+        elseif data.Darkness == "DARKNESS_TECHNICAL" or (data.Darkness and Ext.Stats.Get(data.Darkness) and Ext.Stats.Get(data.Darkness).Using == "DARKNESS_TECHNICAL") then
+            -- For technical darkness, also check if the status still exists
+            if GetEntityStatus(darknessGuid, "DARKNESS_TECHNICAL") == nil then
+                table.insert(outdatedDarkness, darknessGuid)
+            end
+        end
+    end
+
+    for _, darknessGuid in ipairs(outdatedDarkness) do
+        DarknessParents[darknessGuid] = nil
+        Log("Removed outdated Darkness parent: %s", darknessGuid)
+    end
+
+    SavePersistence()
 end
 
 function OnSessionLoaded()

@@ -40,13 +40,22 @@ function SetTimer(time, call, ...)
     end)
     return event
 end
-
 -- Loads persisted ModVar table of items with active Darkness applied
 function LoadPersistence()
+    DarknessParents = {}
+    
     local modVars = Ext.Vars.GetModVariables(ModuleUUID)
     if modVars then
         if modVars.DarknessParents then
-            DarknessParents = modVars.DarknessParents
+            -- Normalize the guids if outdated persistence exists
+            for guid, value in pairs(modVars.DarknessParents) do
+                local shortGuid = GetShortGuid(guid)
+
+                if shortGuid then
+                    DarknessParents[shortGuid] = value
+                end
+            end
+            
             Log("PERSISTENCE: DARKNESS PARENTS LOADED")
         else
             DarknessParents = {}
@@ -106,5 +115,16 @@ function SaveDarknessPlaceSpells(spellTable)
         end
     else
         Log("SPELLS: No changes to save.")
+    end
+end
+
+---@param guid string
+---@return string|nil
+function GetShortGuid(guid)
+    if guid then
+        return string.match(guid, "([0-9a-f%-]+)$")
+    else
+        Log("GetShortGuid: Received nil guid")
+        return nil
     end
 end

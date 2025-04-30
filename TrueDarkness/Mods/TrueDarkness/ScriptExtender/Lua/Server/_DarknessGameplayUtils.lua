@@ -3,11 +3,15 @@
 DarknessHelperObject = "bdddd432-a5fd-4110-bfc2-90d7792631a0"
 
 ---Return user status that's using a mod's status
----@param guid string
+---@param entityIn string | EntityHandle
 ---@param statusIn string
 ---@return string | nil
-function GetEntityStatus(guid, statusIn)
-    local entity = Ext.Entity.Get(guid)
+function GetEntityStatus(entityIn, statusIn)
+    local entity = entityIn
+
+    if type(entityIn) == "string" then
+        entity = Ext.Entity.Get(entityIn)
+    end
 
     if entity and entity.StatusContainer and entity.StatusContainer.Statuses then
         local entityStatuses = entity.StatusContainer.Statuses
@@ -138,13 +142,10 @@ end
 function GetWeaponWielderGuid(itemGuid)
     local item = Ext.Entity.Get(itemGuid)
 
-    if item and item.Wielding and item.Weapon then
-        local character = item.Wielding.Owner
-
-        if character and character.Uuid then
-            return character.Uuid.EntityUuid
-        end
+    if not item or not item.Weapon or not item.Wielding or not item.Wielding.Owner or not item.Wielding.Owner.Uuid then
+        Log("Received guid is not a weapon: %s", itemGuid)
+        return nil
     end
-
-    return nil
+    
+    return item.Wielding.Owner.Uuid.EntityUuid
 end
