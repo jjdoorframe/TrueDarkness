@@ -121,8 +121,9 @@ local function AddSpellConditions(spellTable, spellType, conditions)
 
             if not string.find(spell[conditionsType], conditions) then
                 local originalConditions = ""
+
                 if spell[conditionsType] ~= nil and spell[conditionsType] ~= "" then
-                    originalConditions = "(" .. spell[conditionsType] .. ") and "
+                    originalConditions = "(" .. spell[conditionsType]:gsub(";", "") .. ") and "
                 end
 
                 spell[conditionsType] = originalConditions .. "(" .. conditions .. ")"
