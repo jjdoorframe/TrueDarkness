@@ -59,7 +59,7 @@ type "SpellData"
 data "SpellType" "Target"
 using "Target_Darkness_Sorcerer"
 data "SpellContainerID" "Target_Darkness_Sorcerer"
-data "SpellProperties" "IF(Item()):ApplyStatus(DARKNESS_TECHNICAL,100,100);IF(Character()):ApplyEquipmentStatus(MainHand,DARKNESS_TECHNICAL_SORCERER,100,100);GROUND:ApplyStatus(SELF,EYESOFTHEDARK_DARKNESS,100,100)"
+data "SpellProperties" "IF(Item()):ApplyStatus(DARKNESS_TECHNICAL,100,100);IF(Character()):ApplyEquipmentStatus(MainHand,DARKNESS_TECHNICAL,100,100);GROUND:ApplyStatus(SELF,EYESOFTHEDARK_DARKNESS,100,100)"
 data "TargetConditions" "TD_NotInDaylight(context.Target) and (Item() or (HasWeaponInMainHand() and Self()))"
 data "AreaRadius" ""
 // Darkness: Enchant Item

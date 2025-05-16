@@ -331,6 +331,8 @@ local function CasterCanSee(casterGuid, checkType, targetX, targetY, targetZ)
                 sightDistance = 36.5
             elseif CharacterHasPassive(casterGuid, "EYES_OF_THE_DARK") then
                 sightDistance = 36
+            elseif GetEntityStatus(casterGuid, "EYESOFTHEDARK_DARKNESS") then
+                sightDistance = 25
             elseif CharacterHasPassive(casterGuid, "DevilsSight") or CharacterHasPassive(casterGuid, "SlayersEyes") then
                 sightDistance = 24
             elseif CharacterHasPassive(casterGuid, "DARK_ONES_EYE") or GetEntityStatus(casterGuid, "DARK_ONES_EYE_ALLY") then
