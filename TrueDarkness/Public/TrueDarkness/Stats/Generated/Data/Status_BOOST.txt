@@ -8,7 +8,7 @@ using "BLINDED"
 // A blinded creature can't see and automatically fails any &lt;LSTag Tooltip="AbilityCheck"&gt;ability check&lt;/LSTag&gt; that requires sight.&lt;br&gt;&lt;Br&gt;&lt;LSTag Tooltip="AttackRoll"&gt;Attack rolls&lt;/LSTag&gt; against the creature have ad&lt;LSTag Tooltip="Advantage"&gt;Advantage&lt;/LSTag&gt;vantage, and the creature's attack rolls have &lt;LSTag Tooltip="Disadvantage"&gt;disadvantage&lt;/LSTag&gt;.
 data "Description" "h5c55526f9fa245028ae5fd714d69378d1aca;1"
 // Support for mods that introduce FightingStyle_BlindFighting to work correctly at 10ft distance
-data "Boosts" "IF(not TD_BlindFighting()):Disadvantage(AttackRoll); IF(not TD_BlindFighting(context.Target)):Advantage(AttackTarget)"
+data "Boosts" "IF(not TD_BlindFighting()):Disadvantage(AttackRoll);IF(not TD_BlindFighting(context.Target)):Advantage(AttackTarget);AI_ONLY:Disadvantage(AttackRoll)"
 
 new entry "BLINDED_DARKNESS"
 type "StatusData"
@@ -24,6 +24,7 @@ new entry "VOID_BLINDED"
 type "StatusData"
 data "StatusType" "BOOST"
 using "BLINDED"
+data "StatusPropertyFlags" "InitiateCombat;Blind;DisableCombatlog"
 
 // Hunger of Hadar
 // Forced diadvantage on attack rolls agains the targets that are inside HoH
@@ -32,8 +33,8 @@ new entry "VOID_START"
 type "StatusData"
 data "StatusType" "BOOST"
 using "VOID_START"
-data "OnApplyFunctors" "ApplyStatus(VOID_BLINDED, 100, -1); ApplyStatus(HEAVILY_OBSCURED_STATUS, 100, -1)"
-data "OnRemoveFunctors" "RemoveStatus(VOID_BLINDED); RemoveStatus(HEAVILY_OBSCURED_STATUS)"
+data "OnApplyFunctors" "ApplyStatus(VOID_BLINDED, 100, -1);ApplyStatus(HEAVILY_OBSCURED_STATUS, 100, -1);ApplyStatus(AI_HELPER_AVOIDAREA_RADIUS6, 100, -1)"
+data "OnRemoveFunctors" "RemoveStatus(VOID_BLINDED);RemoveStatus(HEAVILY_OBSCURED_STATUS);RemoveStatus(AI_HELPER_AVOIDAREA_RADIUS6)"
 
 // Status indicating that a character is heavily obscured
 new entry "HEAVILY_OBSCURED_STATUS"
