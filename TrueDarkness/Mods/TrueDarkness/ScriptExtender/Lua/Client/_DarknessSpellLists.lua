@@ -14,7 +14,8 @@ CheckPlaceDarkness = InitSpellTable {"Target_ConjureElementals_Minor_Container",
     "Target_ConjureWoodlandBeings", "Teleportation_ArcaneGate", "Target_CallLightning", "Target_ControlFlames",
     "Target_CreateBonfire", "Target_CursedTome_WakeTheDead", "Target_DustDevil", "Target_EruptingEarth",
     "Target_HealingSpirit", "Target_Maelstrom", "Target_ShapeWater", "Target_SummonBeholderkin",
-    "Target_SummonConstruct", "Target_SummonElemental", "Target_SummonFey"}
+    "Target_SummonConstruct", "Target_SummonElemental", "Target_SummonFey", "Target_GraspingVine", "Target_Gust",
+    "Target_MoldEarth"}
 
 ---Spells that target creatures
 ---Source: https://homebrewery.naturalcrit.com/share/Hk7zwD4Gxr
@@ -34,7 +35,7 @@ CheckTargetDarkness = InitSpellTable {"Projectile_AcidSplash", "Target_AnimalFri
     "Target_MaximiliansEarthenGrasp", "Target_MindSpike", "Projectile_NegativeEnergyFlood", "Target_PowerWordStun",
     "Target_SteelWindStrike", "Target_TollTheDead", "Shout_WordOfRadiance", "Target_IntellectFortress",
     "Target_LightningLure", "Target_MindSliver", "Target_TashasMindWhip", "Target_Feeblemind", "Target_FingerOfDeath",
-    "Shout_WaterWalk", "Target_EnemiesAbound"}
+    "Shout_WaterWalk", "Target_EnemiesAbound", "Target_DominateMonster", "Target_Levitate"}
 
 ---Spells that target creatures that should be ignored
 ---@type table
